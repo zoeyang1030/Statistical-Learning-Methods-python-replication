@@ -43,7 +43,9 @@ def gen_class(n=20, interval=3, var=1, random_seed=None, label_type=0):
     if not random_seed is None: np.random.seed(random_seed)
 
     x1 = np.random.normal(size=(n, 2), loc=-interval, scale=var)
+    x1 += np.random.normal(size=(n, 2), loc=0, scale=var/3)
     x2 = np.random.normal(size=(n, 2), loc=interval, scale=var)
+    x2 += np.random.normal(size=(n, 2), loc=0, scale=var/3)
     y1 = -np.ones(n) if label_type else np.zeros(n)
     y2 = np.ones(n)
 
@@ -103,6 +105,6 @@ def split_train_test(X, y, p=0.3, random_seed=None):
     """
     if not random_seed is None: np.random.seed(random_seed)
     length = len(y)
-    test_index = np.random.choice(range(length), int(length*p))
+    test_index = np.random.choice(range(length), int(length*p), replace=False)
     train_index = np.setdiff1d(np.array(range(length)), test_index)
     return X[train_index], X[test_index], y[train_index], y[test_index]

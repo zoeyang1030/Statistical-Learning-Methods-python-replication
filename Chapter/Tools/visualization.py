@@ -3,8 +3,11 @@ import matplotlib.pyplot as plt
 
 class LinearClassifierPlot(object):
     def __init__(self, ax=None):
-        if not ax: _, self.ax = plt.subplots(figsize=(8, 6))
-        else: self.ax = ax
+        if not ax: 
+            _, self.ax = plt.subplots(figsize=(8, 6))
+            self._template()
+        else: 
+            self.ax = ax
         self.class_dict = {'class_n':0}
 
     def _template(self):
@@ -30,17 +33,20 @@ class LinearClassifierPlot(object):
                 self.ax.scatter(x[:, 0], x[:, 1], marker=marker[j], c=color[j],
                                 label='Class %s'%j, edgecolor='black', 
                                 linewidth=1, s=110, alpha=0.7)
+        
+        self.ax.legend(loc=2)
     
     def hyperplane_plot(self, model, label='Hyperplane', c='gray', ls='-'):
         if not self.ax: Exception('Must plot data first.') 
         coef = model.get_coef()
         y = []
-        k = - coef[0] / coef[1]
+        k = - coef[0][0] / coef[0][1]
         b = coef[-1]
         for x in self.ax.get_xlim():
             y.append(k*x+b)
         
         self.ax.plot(self.ax.get_xlim(), y, color=c, ls=ls, label=label)
+        self.ax.legend(loc=2)
 
     def clear(self):
         self.ax = None
