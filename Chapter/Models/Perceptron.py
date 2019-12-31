@@ -91,29 +91,24 @@ class PerceptronLinearAlgorithm(object):
         self._c = c_array
 
     def _perceptron_averaged(self, X, y):
-        k = 0
         sample = X.shape[1]
-        w_array = np.array(np.zeros(X.shape[0]).reshape(1, X.shape[0]))
-        b_array = c_array = np.zeros(1)
+        w = u = np.zeros(X.shape[0]).reshape(1, X.shape[0])
+        b = beta = 0
+        c = 0
+        iteration = 0
 
-        for i in range(sample):
-            if (np.dot(w_array[k], X[:, i]) + b_array[k]) * y[i] > 0:
-                c_array[k] += 1
-            else:
-                w_k = w_array[k]+y[k]*X[:, k]
-                w_array = np.concatenate([w_array, w_k.reshape(1, X.shape[0])])
-                b_array = np.append(b_array, b_array[k]+y[k])
-                c_array = np.append(c_array, 1)
-                k += 1
-        
-        k = len(b_array)
-        b_array = b_array*c_array
-        c_array = c_array.reshape(k, 1)
-        w_array = w_array*c_array
-        w = w_array.sum(0)
-        b = b_array.sum()
+        while iteration < self._param['max_iter']:
+            for i in range(sample):
+                iteration += 1
+                if (np.dot(w, X[:, i]) + b) * y[i] > 0:
+                    c += 1
+                else:
+                    w += self._param['lr']*y[i]*X[:, i]
+                    b += self._param['lr']*y[i]
+                    u += c*y[i]*X[:, i]
+                    beta += c*y[i]
 
-        self._standardization(w, b)
+        self._standardization((w-u/c)[0], b-beta/c)
 
     def _perceptron_margin(self, X, y):
         if 'm' in self._param: m = self._param['m']
