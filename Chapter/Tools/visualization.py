@@ -2,18 +2,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class LinearClassifierPlot(object):
-    def __init__(self, ax=None):
+    def __init__(self, title='Feature Visualization', ax=None):
+        self.title = title
         if not ax: 
-            _, self.ax = plt.subplots(figsize=(8, 6))
+            _, self.ax = plt.subplots(figsize=(4.5, 5))
             self._template()
         else: 
             self.ax = ax
+            self._template()
         self.class_dict = {'class_n':0}
+        self.lim = {}
 
     def _template(self):
-        self.ax.set_xlabel("First feature", fontsize=13)
-        self.ax.set_ylabel("Second feature", fontsize=13)
-        self.ax.set_title('Feature Visualization', weight='bold', fontsize=19)
+        self.ax.set_xlabel("First feature", fontsize=11)
+        self.ax.set_ylabel("Second feature", fontsize=11)
+        self.ax.set_title(self.title, weight='bold', fontsize=14)
 
     def scatter_plot(self, X, y):
         y_source = np.unique(y)
@@ -32,20 +35,24 @@ class LinearClassifierPlot(object):
                 j = self.class_dict[y_label]
                 self.ax.scatter(x[:, 0], x[:, 1], marker=marker[j], c=color[j],
                                 label='Class %s'%j, edgecolor='black', 
-                                linewidth=1, s=110, alpha=0.7)
+                                linewidth=1, s=80, alpha=0.7)
+
+        self.lim['x_min'] = min(self.ax.get_xlim())
+        self.lim['x_max'] = max(self.ax.get_xlim())
+        self.lim['y_min'] = min(self.ax.get_ylim())
+        self.lim['y_max'] = max(self.ax.get_ylim())
         
         self.ax.legend(loc=2)
     
-    def hyperplane_plot(self, model, label='Hyperplane', c='gray', ls='-'):
+    def hyperplane_plot(self, model, c='black', ls='--'):
         if not self.ax: Exception('Must plot data first.') 
-        coef = model.get_coef()
-        y = []
-        k = - coef[0][0] / coef[0][1]
-        b = coef[-1]
-        for x in self.ax.get_xlim():
-            y.append(k*x+b)
-        
-        self.ax.plot(self.ax.get_xlim(), y, color=c, ls=ls, label=label)
+        xx, yy = np.meshgrid(np.arange(self.lim['x_min'], self.lim['x_max'], 0.02),
+                             np.arange(self.lim['y_min'], self.lim['y_max'], 0.02))
+        Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+        Z = Z.reshape(xx.shape)
+        self.ax.contour(xx, yy, Z, colors=c, linestyles=ls, alpha=0.5)
+        self.ax.set_xlim(self.lim['x_min'], self.lim['x_max'])
+        self.ax.set_ylim(self.lim['y_min'], self.lim['y_max'])
         self.ax.legend(loc=2)
 
     def clear(self):

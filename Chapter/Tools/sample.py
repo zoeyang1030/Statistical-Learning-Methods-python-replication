@@ -51,7 +51,6 @@ def gen_class(n=20, interval=3, var=1, random_seed=None, label_type=0):
 
     X = np.append(x1, x2, axis=0)
     y = np.append(y1, y2)
-    print("X.shape: {}".format(X.shape))
 
     return X, y
 

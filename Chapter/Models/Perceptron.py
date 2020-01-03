@@ -1,7 +1,7 @@
 import numpy as np
 
 class PerceptronLinearAlgorithm(object):
-    def __init__(self, lr=0.01, max_iter=1e5, model_type='traditional', m=None):
+    def __init__(self, lr=0.01, max_iter=1e5, model_type='traditional', margin=None):
         self._w = None
         self._b = None
         self._c = None
@@ -10,7 +10,7 @@ class PerceptronLinearAlgorithm(object):
             'max_iter': max_iter,
             'model_type': model_type
         }
-        if not m is None: self._param['m'] = m
+        if not margin is None: self._param['m'] = margin
 
     def _perceptron_traditional(self, X, y):
         iteration = 0
@@ -71,20 +71,23 @@ class PerceptronLinearAlgorithm(object):
         self._standardization(w[0], b)
 
     def _perceptron_voted(self, X, y):
+        iteration = 0
         k = 0
         sample = X.shape[1]
         w_array = np.array(np.zeros(X.shape[0]).reshape(1, X.shape[0]))
         b_array = c_array = np.zeros(1)
 
-        for i in range(sample):
-            if (np.dot(w_array[k], X[:, i]) + b_array[k]) * y[i] > 0:
-                c_array[k] += 1
-            else:
-                w_k = w_array[k]+y[k]*X[:, k]
-                w_array = np.concatenate([w_array, w_k.reshape(1, X.shape[0])])
-                b_array = np.append(b_array, b_array[k]+y[k])
-                c_array = np.append(c_array, 1)
-                k += 1
+        while iteration < 1000:#self._param['max_iter']:
+            for i in range(sample):
+                iteration += 1
+                if (np.dot(w_array[k], X[:, i]) + b_array[k]) * y[i] > 0:
+                    c_array[k] += 1
+                else:
+                    w_k = w_array[k] + self._param['lr']*y[i]*X[:, i]
+                    w_array = np.concatenate([w_array, w_k.reshape(1, X.shape[0])])
+                    b_array = np.append(b_array, b_array[k]+self._param['lr']*y[i])
+                    c_array = np.append(c_array, 1)
+                    k += 1
         
         self._w = w_array
         self._b = b_array
