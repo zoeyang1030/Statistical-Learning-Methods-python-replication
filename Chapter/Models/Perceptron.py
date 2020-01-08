@@ -153,8 +153,8 @@ class PerceptronLinearAlgorithm(object):
         else:
             return (np.dot(self._w, X)+self._b>=0)*2-1
 
-    def score(self, X_test, y_test):
-        return (self.predict(X_test)==y_test).sum()/X_test.shape[0]
+    def score(self, X, y):
+        return (self.predict(X)==y).sum()/X.shape[0]
 
     def get_param(self):
         return self._param

@@ -98,7 +98,7 @@ class KNearestNeighbor(object):
         return neighbors
     
     def _search_label(self, point):
-        return (self._search(point)[1].sum()>=0)*1
+        return ((self._search(point)[1].sum()>=0)-0.5)*2
 
     def fit(self, X, y):
         self._tree = KDTree(X, y)
@@ -106,3 +106,9 @@ class KNearestNeighbor(object):
     def predict(self, X):
         if len(X.shape) == 1: X = X.reshape(1, X.shape[0])
         return np.apply_along_axis(self._search_label, 1, X)
+
+    def score(self, X, y):
+        return (self.predict(X)==y).sum()/X.shape[0]
+
+    def get_param(self):
+        return self._param
