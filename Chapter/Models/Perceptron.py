@@ -25,7 +25,7 @@ class PerceptronLinearAlgorithm(object):
                 w += self._param['lr'] * y[i] * X[:, i]
                 b += self._param['lr'] * y[i]
 
-        self._standardization(w[0], b)
+        self._submit(w[0], b)
 
     def _perceptron_dualform(self, X, y):
         iteration = 0
@@ -44,7 +44,7 @@ class PerceptronLinearAlgorithm(object):
                 b += self._param['lr'] * y[i]
 
         w = np.dot(a.T*y, X.T)
-        self._standardization(w[0], b)
+        self._submit(w[0], b)
 
     def _pocket_algorithm(self, X, y):
         iteration = 0
@@ -68,7 +68,7 @@ class PerceptronLinearAlgorithm(object):
                 w_p += self._param['lr'] * y[i] * X[:, i]
                 b_p += self._param['lr'] * y[i]
 
-        self._standardization(w[0], b)
+        self._submit(w[0], b)
 
     def _perceptron_voted(self, X, y):
         iteration = 0
@@ -111,7 +111,7 @@ class PerceptronLinearAlgorithm(object):
                     u += c*y[i]*X[:, i]
                     beta += c*y[i]
 
-        self._standardization((w-u/c)[0], b-beta/c)
+        self._submit((w-u/c)[0], b-beta/c)
 
     def _perceptron_margin(self, X, y):
         if 'm' in self._param: m = self._param['m']
@@ -128,12 +128,11 @@ class PerceptronLinearAlgorithm(object):
                 w += self._param['lr'] * y[i] * X[:, i]
                 b += self._param['lr'] * y[i]
 
-        self._standardization(w[0], b)
+        self._submit(w[0], b)
 
-    def _standardization(self, w, b):
-        w2 = (w**2).sum()**(1/2)
-        self._w = w / w2
-        self._b = b / w2
+    def _submit(self, w, b):
+        self._w = w
+        self._b = b
 
     def fit(self, X, y):
         X = X.T

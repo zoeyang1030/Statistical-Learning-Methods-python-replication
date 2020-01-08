@@ -61,3 +61,21 @@ class LinearClassifierPlot(object):
     def show(self):
         self._template()
         return self.ax.figure
+
+def plot_kd_tree(ax, tree, root=None):
+    if not tree: return
+    if not (tree.left or tree.right): return
+    s = 1 if tree.index else -1
+    edge = [ax.get_ylim(), ax.get_xlim()][tree.index]
+    d = tree.node[tree.index]
+    xy1, xy2 = [edge[0], d], [edge[1], d]
+    margin = 0.02
+    if root:
+        if tree.node[root.index] >= root.node[root.index]: xy1[0] = root.node[1-tree.index]-margin
+        else: xy2[0] = root.node[1-tree.index]+margin
+
+    ax.annotate("", xy=xy1[::s], xytext=xy2[::s],
+                 arrowprops={'arrowstyle':'-', 'connectionstyle':'arc3,rad=0.'})
+
+    plot_kd_tree(ax, tree.left, root=tree)
+    plot_kd_tree(ax, tree.right, root=tree)
