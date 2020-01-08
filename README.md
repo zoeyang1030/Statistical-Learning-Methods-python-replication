@@ -4,8 +4,8 @@ Python replication for [Dr. Hang Li](https://www.hangli-hl.com/index.html)'s boo
 ## Content
 - Chapter 2: Perceptron Algorithm
   - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/Perceptron.py) 
-  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-2%20Perceptron.ipynb)
+  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-2-Perceptron.ipynb)
  
 - Chapter 3: K-Nearest Neighbor
   - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/KNearestNeighbor.py) 
-  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-3%KNN.ipynb)
+  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-3-KNN.ipynb)
