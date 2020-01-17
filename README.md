@@ -3,9 +3,13 @@ Python replication for [Dr. Hang Li](https://www.hangli-hl.com/index.html)'s boo
 
 ## Content
 - Chapter 2: Perceptron Algorithm
-  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/Perceptron.py) 
-  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-2-Perceptron.ipynb)
+  - [Perceptron Linear Classifier and Its Extensions](https://arreat.top/perceptron-linear-classifier-and-its-extensions/)
+  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/Perceptron.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-2-Perceptron.ipynb)
  
 - Chapter 3: K-Nearest Neighbor
-  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/KNearestNeighbor.py) 
-  - [Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-3-KNN.ipynb)
+  - [K-Nearest Neighbors and K-Dimensional Tree](https://arreat.top/kNN-and-kdtree/)
+  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/KNearestNeighbor.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-3-KNN.ipynb)
+
+- Chapter 4: Naive Bayesian Classifier
+
+  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/NaiveBayesianClassifier.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-4-NaiveBayes.ipynb)
