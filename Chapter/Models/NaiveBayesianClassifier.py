@@ -44,7 +44,7 @@ class Bernoulli(object):
         if len(X.shape) == 1: X = X.reshape(1, X.shape[0])
         return np.array(list(map(self._predict, X)))
 
-    def score(X, y):
+    def score(self, X, y):
         return (self.predict(X)==y).sum() / len(y)
 
 
@@ -88,5 +88,5 @@ class Gaussian(object):
         if len(X.shape) == 1: X = X.reshape(1, X.shape[0])
         return np.array(list(map(self._predict, X)))
 
-    def score(X, y):
-        pass
+    def score(self, X, y):
+        return (self.predict(X)==y).sum() / len(y)

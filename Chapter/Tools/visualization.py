@@ -55,6 +55,17 @@ class LinearClassifierPlot(object):
         self.ax.set_ylim(self.lim['y_min'], self.lim['y_max'])
         self.ax.legend(loc=2)
 
+    def hyperplane_plot_BNB(self, model, c='black', ls='--', r=0):
+        if not self.ax: Exception('Must plot data first.') 
+        xx, yy = np.meshgrid(np.arange(self.lim['x_min'], self.lim['x_max'], 0.02),
+                             np.arange(self.lim['y_min'], self.lim['y_max'], 0.02))
+        Z = model.predict(np.c_[xx.ravel().round(r), yy.ravel().round(r)])
+        Z = Z.reshape(xx.shape)
+        self.ax.contour(xx, yy, Z, colors=c, linestyles=ls, alpha=0.5)
+        self.ax.set_xlim(self.lim['x_min'], self.lim['x_max'])
+        self.ax.set_ylim(self.lim['y_min'], self.lim['y_max'])
+        self.ax.legend(loc=2)
+
     def clear(self):
         self.ax = None
 
