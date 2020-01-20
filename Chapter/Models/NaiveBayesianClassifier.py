@@ -35,7 +35,6 @@ class Bernoulli(object):
         pred_P = np.array([])
         c = list(P_y.keys())
         for c_k in c:
-            [P_xy[c_k][j][x[0][j]] for j in range(x.shape[1])]
             p = np.prod([P_y[c_k]]+[P_xy[c_k][j][x[0][j]] for j in range(x.shape[1])])
             pred_P = np.append(pred_P, p)
         return c[np.where(pred_P==pred_P.max())[0][0]]
@@ -81,6 +80,41 @@ class Gaussian(object):
                 p_i = stats.norm(mu, sigma).pdf(xi)
                 p_i_list.append(p_i)
             p = np.prod(P_y[c_k]+p_i_list)
+            pred_P = np.append(pred_P, p)
+        return c[np.where(pred_P==pred_P.max())[0][0]]
+
+    def predict(self, X):
+        if len(X.shape) == 1: X = X.reshape(1, X.shape[0])
+        return np.array(list(map(self._predict, X)))
+
+    def score(self, X, y):
+        return (self.predict(X)==y).sum() / len(y)
+
+class Multinomial(object):
+
+    def __init__(self, lamda=1):
+        self.lamda = lamda
+
+    def fit(self, X, y):
+        if len(X.shape) == 1: X = X.reshape(1, X.shape[0])
+        P_y = {}
+        P_xy = {}
+        c = list(set(y))
+        for c_k in c:
+            P_y[c_k] = (y==c_k).sum() / X.shape[0]
+            P_xy[c_k] = {}
+            P_xy[c_k] = X[y==c_k].sum(0) / X[y==c_k].sum()
+    
+        self.P_y = P_y
+        self.P_xy = P_xy
+
+    def _predict(self, x):
+        P_y = self.P_y
+        P_xy = self.P_xy
+        c = list(P_y.keys())
+        pred_P = np.array([])
+        for c_k in c:
+            p = P_y[c_k] * np.prod(P_xy[c_k]**x)
             pred_P = np.append(pred_P, p)
         return c[np.where(pred_P==pred_P.max())[0][0]]
 
