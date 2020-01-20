@@ -11,5 +11,5 @@ Python replication for [Dr. Hang Li](https://www.hangli-hl.com/index.html)'s boo
   - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/KNearestNeighbor.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-3-KNN.ipynb)
 
 - Chapter 4: Naive Bayesian Classifier
-
+  - [Three Types of Naive Bayes Classifier](https://arreat.top/naive-bayes/)
   - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/NaiveBayesianClassifier.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-4-NaiveBayes.ipynb)
