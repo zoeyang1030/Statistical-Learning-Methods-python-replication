@@ -13,3 +13,6 @@ Python replication for [Dr. Hang Li](https://www.hangli-hl.com/index.html)'s boo
 - Chapter 4: Naive Bayesian Classifier
   - [Three Types of Naive Bayes Classifier](https://arreat.top/naive-bayes/)
   - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/NaiveBayesianClassifier.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-4-NaiveBayes.ipynb)
+
+- Chapter 5: Decision Tree
+  - [Code](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Models/DecisionTree.py)&ensp;**·**&ensp;[Jupyter Notebook Demo](https://github.com/ZijingHu/Statistical-Learning-Methods-python-replication/blob/master/Chapter/Chapter-5-DecisionTree.ipynb)
