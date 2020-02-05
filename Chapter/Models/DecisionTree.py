@@ -1,4 +1,6 @@
 import numpy as np
+from copy import deepcopy
+from Tools.sample import split_train_test
 
 
 class DTree(object):
@@ -171,7 +173,7 @@ class CartTree(object):
 
     def _gini(self, x):
         _, c = np.unique(x, return_counts=True)
-        gini = 1 - ((c / x.shape[0]) ** 2).sum()
+        gini = 1 - ((c / c.sum()) ** 2).sum()
         return gini
 
     def _fea_select(self, X, y):
@@ -211,9 +213,6 @@ class CartTree(object):
            or len(np.unique(self._y)) == 1 \
            or len(np.unique(self._X.astype(str), axis=0)) == 1:
             if self._classifier:
-                if len(self._y) == 0: 
-                    self._loss = 0
-                    return
                 self._value = np.argmax(np.bincount(self._y))
                 D1 = (self._y == self._value)
                 D2 = ~D1
@@ -239,10 +238,7 @@ class CartTree(object):
 
         if self._classifier:
             self._majority = np.argmax(np.bincount(self._y))
-            D1 = (self._y == self._majority)
-            D2 = ~D1
-            self._loss = self._gini(self._y[D1]) * D1.sum() \
-                         + self._gini(self._y[D2]) * D2.sum()
+            self._loss = self._gini(self._y) * len(self._y)
         else:
             self._majority = self._y.mean()
             self._loss = ((self._y - self._majority)**2).sum()
@@ -255,7 +251,7 @@ class CartTree(object):
             if t0.sum() == 0: 
                 t0 = (self._X[:, self._idx] <= self._split_value)
             t1 = ~t0
-
+        
         self._ltree = CartTree(self._max_sample, self._max_metrics)
         self._ltree._load(self._X[t0], self._y[t0], classifier=self._classifier)
         self._ltree._gen_tree()
@@ -265,6 +261,11 @@ class CartTree(object):
         self._rtree._gen_tree()
 
         self._rm()
+
+    def _cut(self):
+        self._value = self._majority
+        delattr(self, '_ltree')
+        delattr(self, '_rtree')
 
     def _predict(self, x):
         if self._value is not None:
@@ -298,13 +299,75 @@ class CartTree(object):
 class DecisionTree(object):
 
     def __init__(self, alg='ID3', alpha=0, max_sample=1, prune=True):
+        self._alg = alg
+        self._prune = prune
         if alg in ['ID3', 'C4.5']:
             self._tree = DTree(alg, alpha, prune=prune)
         elif alg == 'CART':
             self._tree = CartTree(max_sample, alpha)
 
+    def _count_leaf(self, tree):
+        if tree._value is not None:
+            return 1
+        else:
+            return self._count_leaf(tree._ltree) + self._count_leaf(tree._rtree)
+
+    def _total_loss(self, tree):
+        if tree._value is not None:
+            return tree._loss
+        else:
+            return self._total_loss(tree._ltree) + self._total_loss(tree._rtree)
+
+    def _g(self, tree):
+        T = self._count_leaf(tree)
+        C = self._total_loss(tree)
+        g = (tree._loss-C) / (T-1)
+        return g
+
+    def _get_alpha(self, tree):
+        if tree._value is not None:
+            return np.inf
+        else:
+            return min(self._g(tree), self._g(tree._ltree), self._g(tree._rtree))
+
+    def _cut(self, tree, alpha):
+        if tree._value is not None:
+            return tree
+        else:
+            if self._g(tree) == alpha:
+                tree._cut()
+                return tree
+            else:
+                tree._ltree = self._cut(tree._ltree, alpha)
+                tree._rtree = self._cut(tree._rtree, alpha)
+
+        return tree
+
+    def _cart_prune(self, tree):
+        tree_list = []
+        while self._tree._value is None:
+            alpha = self._get_alpha(self._tree)
+            tree_list.append(deepcopy(self._tree))
+            self._tree = self._cut(self._tree, alpha)
+
+        return tree_list
+
     def fit(self, X, y):
-        self._tree.fit(X, y)
+        if self._alg in ['ID3', 'C4.5']:
+            self._tree.fit(X, y)
+        elif self._alg == 'CART':
+            if self._prune:
+                score = 0
+                X_train, X_test, y_train, y_test = split_train_test(X, y, 0.9)
+                self._tree.fit(X_train, y_train)
+                tree_list = self._cart_prune(self._tree)
+                for tree in tree_list:
+                    score_i = tree.score(X_test, y_test)
+                    if score < score_i:
+                        score = score_i
+                        self._tree = tree
+            else:
+                self._tree.fit(X, y)
 
     def predict(self, X):
         return self._tree.predict(X)
