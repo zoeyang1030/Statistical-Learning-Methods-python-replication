@@ -90,3 +90,12 @@ def plot_kd_tree(ax, tree, root=None):
 
     plot_kd_tree(ax, tree.left, root=tree)
     plot_kd_tree(ax, tree.right, root=tree)
+
+def viz_dt(dt, level=0):
+    if dt._value is not None:
+        print(':', dt._value, end='')
+    else:
+        for c in dt._category:
+            print()
+            print(' '*level+'-', '[%s]' % dt._f, c, end='')
+            viz_dt(getattr(dt, 't%s' % c), level+2)

@@ -7,7 +7,6 @@ class DTree(object):
 
     def __init__(self, alg='ID3', alpha=0.1, prune=True):
         self._category = None
-        self._name = None
         self._value = None
         self._majority = None
         self._idx = None
@@ -18,7 +17,7 @@ class DTree(object):
     def _load(self, X, y, feature=None):
         self._X = X.astype(str)
         self._y = y
-        if feature:
+        if feature is not None:
             self._feature = feature
         else:
             self._feature = ['f%s'%i for i in range(X.shape[1])]
@@ -63,7 +62,7 @@ class DTree(object):
                 max_info, idx = info_gain, i
         self._idx = idx
         if self._feature != []:
-            self._name = self._feature[idx]
+            self._f = self._feature[idx]
             self._category = np.unique(self._X[:, idx])
 
     def _comp_leaf(self):
@@ -77,13 +76,13 @@ class DTree(object):
             self._value = self._comp_leaf()
         else:
             self._majority = self._comp_leaf()
-            self._feature.remove(self._name)
+            self._feature.remove(self._f)
             for c in self._category:
                 sub_idx = (self._X[:, self._idx] == c)
                 sub_X = np.delete(self._X[sub_idx], self._idx, axis=1)
                 sub_y = self._y[sub_idx]
                 setattr(self, 't%s' % c, DTree(self._type, self._alpha))
-                getattr(self, 't%s' % c).fit(sub_X, sub_y)
+                getattr(self, 't%s' % c).fit(sub_X, sub_y, self._feature[:])
                 if self._prune:
                     setattr(self, 't%s' % c,
                             self._pruning(getattr(self, 't%s' % c)))
@@ -115,8 +114,8 @@ class DTree(object):
         else:
             return getattr(self, 't%s' % x[self._idx]).predict(np.delete(x, self._idx))
 
-    def fit(self, X, y):
-        self._load(X, y)
+    def fit(self, X, y, feature=None):
+        self._load(X, y, feature)
         self._select()
         self._sub_tree()
         self._rm()
