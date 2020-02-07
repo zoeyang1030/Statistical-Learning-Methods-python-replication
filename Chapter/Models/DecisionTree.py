@@ -351,9 +351,9 @@ class DecisionTree(object):
 
         return tree_list
 
-    def fit(self, X, y):
+    def fit(self, X, y, feature=None):
         if self._alg in ['ID3', 'C4.5']:
-            self._tree.fit(X, y)
+            self._tree.fit(X, y, feature)
         elif self._alg == 'CART':
             if self._prune:
                 score = 0
